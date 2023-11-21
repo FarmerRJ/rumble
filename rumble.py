@@ -12,6 +12,7 @@ from discord.ext import commands
 from discord.ext.commands import bot
 
 import db
+import defaults
 
 ADMINS = [401371729034870784, 290020410764820480]
 INVITE_LINK = "https://discord.gg/r6yUPEfjbH"
@@ -25,6 +26,7 @@ class Player:
         self.dead = False  # Add a new attribute to track whether a player is dead
         self.potion_used = False
         self.dart_thrown = False
+
     def __str__(self):
         return str(self.user)
 
@@ -58,6 +60,10 @@ class RumbleGame(commands.Cog):
 
         if not (game := self.bot.rumble.get(ctx.guild.id)):
             await ctx.send(f"The command does not work in this server. Please open a ticket at The Farm to purchase.\n{INVITE_LINK}")
+            return
+
+        if not game['active']:
+            await ctx.send(f"You must purchase this game first. Please open a ticket at The Farm.\n{INVITE_LINK}")
             return
 
         if not (game_state := self.bot.rumble_games.get(ctx.channel)):
@@ -155,14 +161,14 @@ class RumbleGame(commands.Cog):
         death_embed.set_image(url=game['death_gif'])
         return death_embed
 
-    async def perform_turn(self, attacker, channel, players, game_state):
+    async def perform_turn(self, attacker, channel, players, game, game_state):
         defender = random.choice([player for player in players if player != attacker and player.hp > 0])
-        action = random.choices(["attack", "special", "heal", "rand"], [70, 20, 5, 5])[0]
+        action = random.choices(["attack", "special", "heal", "rand"], [game['attack_chance'], game['special_chance'], game['heal_chance'], game['rand_chance']])[0]
 
         death_embed = None
 
         if action == "attack":
-            damage = random.randint(15, 25)
+            damage = random.randint(game['attack_min'], game['attack_max'])
             defender.hp -= damage
             if defender.hp < 0:
                 defender.hp = 0
@@ -171,7 +177,7 @@ class RumbleGame(commands.Cog):
                                                           defender=self.player_name_without_discriminator(defender),
                                                           dmg=damage)
         elif action == "special":
-            damage = random.randint(25, 45)
+            damage = random.randint(game['special_min'], game['special_max'])
             defender.hp -= damage
             if defender.hp < 0:
                 defender.hp = 0
@@ -179,14 +185,14 @@ class RumbleGame(commands.Cog):
             phrase = random.choice(game_state['phrases']['special']).format(attacker=self.player_name_without_discriminator(attacker), defender=self.player_name_without_discriminator(defender),
                                                                   dmg=damage)
         elif action == "heal":
-            heal = random.randint(10, 20)
+            heal = random.randint(game['heal_min'], game['heal_max'])
             attacker.hp += heal
             if attacker.hp > 100:
                 attacker.hp = 100
             phrase = random.choice(game_state['phrases']['heal']).format(attacker=self.player_name_without_discriminator(attacker), heal=heal)
 
         elif action == "rand":
-            damage = 50
+            damage = random.randint(game['rand_min'], game['rand_max'])
             defender.hp -= damage
             if defender.hp < 0:
                 defender.hp = 0
@@ -198,6 +204,7 @@ class RumbleGame(commands.Cog):
 
     @commands.command(aliases=['t'])
     async def throw(self, ctx, target: discord.Member):
+        game = self.bot.rumble.get(ctx.guild.id)
         game_state = self.bot.rumble_games.get(ctx.channel.id)  # Get the game state
         if not game_state:
             await ctx.channel.send("There is no active battle in this channel.")
@@ -228,19 +235,28 @@ class RumbleGame(commands.Cog):
             await ctx.channel.send(f"{defender.user.name} is already dead!")
             return
 
-        damage = random.randint(5, 15)  # Adjust this as per your game logic
-        defender.hp -= damage
+        success = random.choices(['hit', 'miss'], [game['weapon1_chance'], (100 - game['weapon1_chance'])])
+        if success[0] == 'hit':
+            damage = random.randint(game['weapon1_min'], game['weapon1_max'])
+            defender.hp -= damage
 
-        if defender.hp <= 0:
-            defender.hp = 0
-            defender.dead = True
+            if defender.hp <= 0:
+                defender.hp = 0
+                defender.dead = True
 
-        attacker.dart_thrown = True
+            attacker.dart_thrown = True
 
-        dart_embed = discord.Embed(title=f"{attacker.user.name} threw a dart at {defender.user.name}!",
-                                   description=f"{defender.user.name} takes {damage} damage!",
-                                   color=discord.Color.red())
-        await ctx.channel.send(embed=dart_embed)
+            dart_embed = discord.Embed(title=f"{attacker.user.name} threw a {game['weapon1_name']} at {defender.user.name}!",
+                                       description=f"{defender.user.name} takes {damage} damage!",
+                                       color=discord.Color.red())
+            await ctx.channel.send(embed=dart_embed)
+        else:
+            attacker.dart_thrown = True
+
+            dart_embed = discord.Embed(title=f"{attacker.user.name} threw a {game['weapon1_name']} at {defender.user.name} and missed",
+                                       description=f"{defender.user.name} takes 0 damage!",
+                                       color=discord.Color.red())
+            await ctx.channel.send(embed=dart_embed)
 
     def get_bottom_players(self, players):
         # Filter out dead players, then sort the players by HP ascending and get the first 5.
@@ -275,11 +291,12 @@ class RumbleGame(commands.Cog):
             if player.hp == 0 and player.dead:
                 revive_chance = random.random()
                 # Check the number of remaining players before reviving a player
-                if revive_chance <= 0.04 and remaining_players > 1:
-                    player.hp = 50
+                if revive_chance <= (game['revive_chance'] / 100) and remaining_players > 1:
+                    amount = random.randrange(game['revive_min'], game['revive_max'])
+                    player.hp = amount
                     player.dead = False
                     revive_embed = discord.Embed(title=random.choice(game_state['phrases']['revive']).format(player=self.player_name_without_discriminator(player)),
-                                                 description=f"{self.player_name_without_discriminator(player)} comes back to life with 50 HP!",
+                                                 description=f"{self.player_name_without_discriminator(player)} comes back to life with {amount} HP!",
                                                  color=discord.Color.green())
                     revive_embed.set_image(url=game['revive_gif'])
                     await asyncio.sleep(10)
@@ -287,6 +304,7 @@ class RumbleGame(commands.Cog):
 
     @commands.command(aliases=['p'])
     async def potion(self, ctx):
+        game = self.bot.rumble.get(ctx.guild.id)
         game_state = self.bot.rumble_games.get(ctx.channel.id)  # Get the game state
         if not game_state:
             await ctx.channel.send("There is no active battle in this channel.")
@@ -311,19 +329,35 @@ class RumbleGame(commands.Cog):
             await ctx.channel.send("You have already used your potion!")
             return
 
-        player.hp += 25
+        success = random.choices(['hit', 'miss'], [game['potion_chance'], (100 - game['potion_chance'])])
+        if success[0] == 'hit':
+            heal = random.randint(game['potion_min'], game['potion_max'])
+            potion_embed = discord.Embed(
+                title=f"{self.player_name_without_discriminator(player)} used a {game['potion_name']}!",
+                description=f"{self.player_name_without_discriminator(player)} recovered {heal} HP!",
+                color=discord.Color.green())
+        else:
+            heal = 0
+            potion_embed = discord.Embed(
+                title=f"{self.player_name_without_discriminator(player)} used a {game['potion_name']}!",
+                description=f"Turns out it was just pee and did nothing.",
+                color=discord.Color.yellow())
+
+        player.hp += heal
         if player.hp > 100:
             player.hp = 100
         player.potion_used = True
 
-        potion_embed = discord.Embed(title=f"{self.player_name_without_discriminator(player)} used a potion!",
-                                     description=f"{self.player_name_without_discriminator(player)} recovered 25 HP!",
-                                     color=discord.Color.green())
         await ctx.channel.send(embed=potion_embed)
 
     @commands.command()
     async def start(self, ctx):
         game = self.bot.rumble.get(ctx.guild.id)
+
+        if not game['active']:
+            await ctx.send(f"You must purchase this game first. Please open a ticket at The Farm.\n{INVITE_LINK}")
+            return
+
         game_state = self.bot.rumble_games[ctx.channel.id]
         players = game_state.get("players", [])
         battle_in_progress = game_state["battle_in_progress"]
@@ -355,7 +389,7 @@ class RumbleGame(commands.Cog):
             for player in players:
                 if player.hp > 0:
                     turn_counter += 1
-                    action_phrase, death_embed = await self.perform_turn(player, ctx.channel, players, game_state)  # Pass the channel
+                    action_phrase, death_embed = await self.perform_turn(player, ctx.channel, players, game, game_state)  # Pass the channel
                     battle_description += action_phrase + "\n"
 
                     if turn_counter % 3 == 0:
@@ -449,37 +483,39 @@ class RumbleGame(commands.Cog):
 def generate_config_embed(game, bot, expire):
     embed = discord.Embed(title=game['game_name'], color=discord.Color.green())
     embed.add_field(name="", value=f"This embed will expire <t:{expire}:R>")
-    value_settings = [f"Heal Chance: {game['heal_chance']}%\n",
-                      f"Heal Amount: {game['heal_min']} - {game['heal_max']}\n",
-                      f"{game['potion_name']} Chance: {game['potion_chance']}%\n",
-                      f"{game['potion_name']} Amount: {game['potion_min']} - {game['potion_max']}\n",
-                      f"Attack Chance: {game['attack_chance']}%\n",
-                      f"Attack Damage: {game['attack_min']} - {game['attack_max']}\n",
-                      f"Random Attack Chance: {game['rand_chance']}%\n",
-                      f"Random Attack Damage: {game['rand_min']} - {game['rand_max']}\n",
-                      f"Special Chance: {game['special_chance']}%\n",
-                      f"Special Damage: {game['special_min']} - {game['special_max']}\n",
-                      f"{game['weapon1_name']} Chance: {game['weapon1_chance']}%\n",
-                      f"{game['weapon1_name']} Damage: {game['weapon1_min']} - {game['weapon1_max']}\n",
+    value_settings = [f"Heal Chance: `{game['heal_chance']}%`\n",
+                      f"Heal Amount: `{game['heal_min']}` - `{game['heal_max']}`\n",
+                      f"Revive Chance: `{game['revive_chance']}%`\n"
+                      f"Revive Amount: `{game['revive_min']}` - `{game['revive_max']}`\n",
+                      f"{game['potion_name']} Chance: `{game['potion_chance']}%`\n",
+                      f"{game['potion_name']} Amount: `{game['potion_min']}` - `{game['potion_max']}`\n",
+                      f"Attack Chance: `{game['attack_chance']}%`\n",
+                      f"Attack Damage: `{game['attack_min']}` - `{game['attack_max']}`\n",
+                      f"Random Attack Chance: `{game['rand_chance']}%`\n",
+                      f"Random Attack Damage: `{game['rand_min']}` - `{game['rand_max']}`\n",
+                      f"Special Chance: `{game['special_chance']}%`\n",
+                      f"Special Damage: `{game['special_min']}` - `{game['special_max']}`\n",
+                      f"{game['weapon1_name']} Chance: `{game['weapon1_chance']}%`\n",
+                      f"{game['weapon1_name']} Damage: `{game['weapon1_min']}` - `{game['weapon1_max']}`\n",
                       ]
     if game.get('weapon2_name'):
-        value_settings.append(f"{game['weapon2_name']} Chance: {game['weapon2_chance']}%\n"
-                              f"{game['weapon2_name']} Damage: {game['weapon2_min']} - {game['weapon2_max']}\n")
-    value_settings.append(f"Revive Chance: {game['revive_chance']}%\n")
-    embed.add_field(name="Battle Values", value="".join(value_settings), inline=False)
-    images = []
+        value_settings.append(f"{game['weapon2_name']} Chance: `{game['weapon2_chance']}%`\n"
+                              f"{game['weapon2_name']} Damage: `{game['weapon2_min']}` - `{game['weapon2_max']}`\n")
+    general = [f"__Command Prefix__\n{game['prefix']}\n",
+               f"__Emoji__\n{game['emoji']}\n"]
     if game['thumbnail']:
         embed.set_thumbnail(url=game['thumbnail'])
-        images.append(f"__Thumbnail__:\n"
+        general.append(f"__Thumbnail__:\n"
                       f"{game['thumbnail']}\n")
     if game['revive_gif']:
-        images.append(f"__Revive Gif__:\n"
+        general.append(f"__Revive Gif__:\n"
                       f"{game['revive_gif']}\n")
     if game['death_gif']:
-        images.append(f"__Death Gif__:\n"
+        general.append(f"__Death Gif__:\n"
                       f"{game['death_gif']}\n")
-    embed.add_field(name="Images/Gifs", value="".join(images), inline=False)
-    embed.add_field(name="Emoji", value=game['emoji'], inline=False)
+    embed.add_field(name="General Info", value="".join(general), inline=False)
+    embed.add_field(name="Battle Values", value="".join(value_settings), inline=False)
+
 
     return embed
 
@@ -497,40 +533,98 @@ class ConfigSettingsModal(discord.ui.Modal, title="Config Settings"):
     async def on_submit(self, interaction: discord.Interaction):
         await interaction.response.defer()
         if self.setting == 'attack':
+            if int(self.children[0].value) < 0 or int(self.children[1].value) < 0 or int(self.children[2].value) < 0:
+                await interaction.followup.send("All values must not be negative.", ephemeral=True)
+                return
+            if int(self.children[0].value) > 100 or int(self.children[1].value) > 100 or int(self.children[2].value) > 100:
+                await interaction.followup.send("All values must be 100 or less.", ephemeral=True)
+                return
             await update_settings(self.bot, 'attack_chance', int(self.children[0].value), interaction.guild.id)
             await update_settings(self.bot, 'attack_min', int(self.children[1].value), interaction.guild.id)
             await update_settings(self.bot, 'attack_max', int(self.children[2].value), interaction.guild.id)
+
         elif self.setting == 'special':
+            if int(self.children[0].value) < 0 or int(self.children[1].value) < 0 or int(self.children[2].value) < 0:
+                await interaction.followup.send("All values must not be negative.", ephemeral=True)
+                return
+            if int(self.children[0].value) > 100 or int(self.children[1].value) > 100 or int(self.children[2].value) > 100:
+                await interaction.followup.send("All values must be 100 or less.", ephemeral=True)
+                return
             await update_settings(self.bot, 'special_chance', int(self.children[0].value), interaction.guild.id)
             await update_settings(self.bot, 'special_min', int(self.children[1].value), interaction.guild.id)
             await update_settings(self.bot, 'special_max', int(self.children[2].value), interaction.guild.id)
+
         elif self.setting == 'rand':
+            if int(self.children[0].value) < 0 or int(self.children[1].value) < 0 or int(self.children[2].value) < 0:
+                await interaction.followup.send("All values must not be negative.", ephemeral=True)
+                return
+            if int(self.children[0].value) > 100 or int(self.children[1].value) > 100 or int(self.children[2].value) > 100:
+                await interaction.followup.send("All values must be 100 or less.", ephemeral=True)
+                return
             await update_settings(self.bot, 'rand_chance', int(self.children[0].value), interaction.guild.id)
             await update_settings(self.bot, 'rand_min', int(self.children[1].value), interaction.guild.id)
             await update_settings(self.bot, 'rand_max', int(self.children[2].value), interaction.guild.id)
+
         elif self.setting == 'revive':
+            if int(self.children[0].value) < 0 or int(self.children[1].value) < 0 or int(self.children[2].value) < 0:
+                await interaction.followup.send("All values must not be negative.", ephemeral=True)
+                return
+            if int(self.children[0].value) > 100 or int(self.children[1].value) > 100 or int(self.children[2].value) > 100:
+                await interaction.followup.send("All values must be 100 or less.", ephemeral=True)
+                return
             await update_settings(self.bot, 'revive_chance', int(self.children[0].value), interaction.guild.id)
             await update_settings(self.bot, 'revive_min', int(self.children[1].value), interaction.guild.id)
             await update_settings(self.bot, 'revive_max', int(self.children[2].value), interaction.guild.id)
+
         elif self.setting == 'potion':
+            if int(self.children[2].value) < 0 or int(self.children[3].value) < 0 or int(self.children[4].value) < 0:
+                await interaction.followup.send("All values must not be negative.", ephemeral=True)
+                return
+            if int(self.children[2].value) > 100 or int(self.children[3].value) > 100 or int(self.children[4].value) > 100:
+                await interaction.followup.send("All values must be 100 or less.", ephemeral=True)
+                return
             await update_settings(self.bot, 'potion_name', str(self.children[0].value), interaction.guild.id)
-            await update_settings(self.bot, 'potion_chance', int(self.children[1].value), interaction.guild.id)
-            await update_settings(self.bot, 'potion_min', int(self.children[2].value), interaction.guild.id)
-            await update_settings(self.bot, 'potion_max', int(self.children[3].value), interaction.guild.id)
+            await update_settings(self.bot, 'potion_alias', str(self.children[1].value), interaction.guild.id)
+            await update_settings(self.bot, 'potion_chance', int(self.children[2].value), interaction.guild.id)
+            await update_settings(self.bot, 'potion_min', int(self.children[3].value), interaction.guild.id)
+            await update_settings(self.bot, 'potion_max', int(self.children[4].value), interaction.guild.id)
+
         elif self.setting == 'heal':
+            if int(self.children[0].value) < 0 or int(self.children[1].value) < 0 or int(self.children[2].value) < 0:
+                await interaction.followup.send("All values must not be negative.", ephemeral=True)
+                return
+            if int(self.children[0].value) > 100 or int(self.children[1].value) > 100 or int(self.children[2].value) > 100:
+                await interaction.followup.send("All values must be 100 or less.", ephemeral=True)
+                return
             await update_settings(self.bot, 'heal_chance', int(self.children[0].value), interaction.guild.id)
             await update_settings(self.bot, 'heal_min', int(self.children[1].value), interaction.guild.id)
             await update_settings(self.bot, 'heal_max', int(self.children[2].value), interaction.guild.id)
+
         elif self.setting == 'weapon1':
+            if int(self.children[2].value) < 0 or int(self.children[3].value) < 0 or int(self.children[4].value) < 0:
+                await interaction.followup.send("All values must not be negative.", ephemeral=True)
+                return
+            if int(self.children[2].value) > 100 or int(self.children[3].value) > 100 or int(self.children[4].value) > 100:
+                await interaction.followup.send("All values must be 100 or less.", ephemeral=True)
+                return
             await update_settings(self.bot, 'weapon1_name', str(self.children[0].value), interaction.guild.id)
-            await update_settings(self.bot, 'weapon1_chance', int(self.children[1].value), interaction.guild.id)
-            await update_settings(self.bot, 'weapon1_min', int(self.children[2].value), interaction.guild.id)
-            await update_settings(self.bot, 'weapon1_max', int(self.children[3].value), interaction.guild.id)
+            await update_settings(self.bot, 'weapon1_alias', str(self.children[1].value), interaction.guild.id)
+            await update_settings(self.bot, 'weapon1_chance', int(self.children[2].value), interaction.guild.id)
+            await update_settings(self.bot, 'weapon1_min', int(self.children[3].value), interaction.guild.id)
+            await update_settings(self.bot, 'weapon1_max', int(self.children[4].value), interaction.guild.id)
+
         elif self.setting == 'weapon2':
+            if int(self.children[2].value) < 0 or int(self.children[3].value) < 0 or int(self.children[4].value) < 0:
+                await interaction.followup.send("All values must not be negative.", ephemeral=True)
+                return
+            if int(self.children[2].value) > 100 or int(self.children[3].value) > 100 or int(self.children[4].value) > 100:
+                await interaction.followup.send("All values must be 100 or less.", ephemeral=True)
+                return
             await update_settings(self.bot, 'weapon2_name', str(self.children[0].value), interaction.guild.id)
-            await update_settings(self.bot, 'weapon2_chance', int(self.children[1].value), interaction.guild.id)
-            await update_settings(self.bot, 'weapon2_min', int(self.children[2].value), interaction.guild.id)
-            await update_settings(self.bot, 'weapon2_max', int(self.children[3].value), interaction.guild.id)
+            await update_settings(self.bot, 'weapon2_alias', str(self.children[1].value), interaction.guild.id)
+            await update_settings(self.bot, 'weapon2_chance', int(self.children[2].value), interaction.guild.id)
+            await update_settings(self.bot, 'weapon2_min', int(self.children[3].value), interaction.guild.id)
+            await update_settings(self.bot, 'weapon2_max', int(self.children[4].value), interaction.guild.id)
         else:
             await update_settings(self.bot, self.setting, str(self.children[0].value), interaction.guild.id)
 
@@ -552,68 +646,71 @@ class ConfigMenu(discord.ui.View):
     @discord.ui.button(label="Set Attack", style=discord.ButtonStyle.blurple, row=0)
     async def attack(self, interaction: discord.Interaction, button: discord.Button):
         modal = ConfigSettingsModal(self.bot, self.interaction, self.game, 'attack', self.expire)
-        modal.add_item(discord.ui.TextInput(label=f"Attack Chance (Default: 70)", placeholder="Enter the attack chance"))
-        modal.add_item(discord.ui.TextInput(label=f"Attack Min (Default: 10)", placeholder="Attack minimum damage"))
-        modal.add_item(discord.ui.TextInput(label=f"Attack Max (Default: 20)", placeholder="Attack maximum damage"))
+        modal.add_item(discord.ui.TextInput(label=f"Attack Chance (Default: {defaults.attack_chance})", placeholder="Enter the attack chance", default=self.game['attack_chance']))
+        modal.add_item(discord.ui.TextInput(label=f"Attack Min (Default: {defaults.attack_min})", placeholder="Attack minimum damage", default=self.game['attack_min']))
+        modal.add_item(discord.ui.TextInput(label=f"Attack Max (Default: {defaults.attack_max})", placeholder="Attack maximum damage", default=self.game['attack_max']))
         await interaction.response.send_modal(modal)
 
     @discord.ui.button(label="Set Special", style=discord.ButtonStyle.blurple, row=0)
     async def special(self, interaction: discord.Interaction, button: discord.Button):
         modal = ConfigSettingsModal(self.bot, self.interaction, self.game, 'special', self.expire)
-        modal.add_item(discord.ui.TextInput(label=f"Special Chance (Default: 10)", placeholder="Enter the special1 chance"))
-        modal.add_item(discord.ui.TextInput(label=f"Special Min (Default: 20)", placeholder="Special1 minimum damage"))
-        modal.add_item(discord.ui.TextInput(label=f"Special Max (Default: 40)", placeholder="Special1 maximum damage"))
+        modal.add_item(discord.ui.TextInput(label=f"Special Chance (Default: {defaults.special_chance})", placeholder="Enter the special1 chance", default=self.game['special_chance']))
+        modal.add_item(discord.ui.TextInput(label=f"Special Min (Default: {defaults.special_min})", placeholder="Special minimum damage", default=self.game['special_min']))
+        modal.add_item(discord.ui.TextInput(label=f"Special Max (Default: {defaults.special_max})", placeholder="Special maximum damage", default=self.game['special_max']))
         await interaction.response.send_modal(modal)
 
     @discord.ui.button(label="Set Weapon 1", style=discord.ButtonStyle.blurple, row=0)
     async def weapon1(self, interaction: discord.Interaction, button: discord.Button):
         modal = ConfigSettingsModal(self.bot, self.interaction, self.game, 'weapon1', self.expire)
-        modal.add_item(discord.ui.TextInput(label=f"Weapon 1 Name (Default: Dart)", placeholder="Enter the name for the weapon"))
-        modal.add_item(discord.ui.TextInput(label=f"Weapon 1 Chance (Default: 90)", placeholder="Enter the chance to hit"))
-        modal.add_item(discord.ui.TextInput(label=f"Weapon 1 Min (Default: 20)", placeholder="Weapon 1 minimum damage"))
-        modal.add_item(discord.ui.TextInput(label=f"Weapon 1 Max (Default: 40)", placeholder="Weapon 1 maximum damage"))
+        modal.add_item(discord.ui.TextInput(label=f"Weapon 1 Name (Default: {defaults.weapon1_name})", placeholder="Enter the name for the weapon", default=self.game['weapon1_name']))
+        modal.add_item(discord.ui.TextInput(label=f"Weapon 1 Command (Default: {defaults.weapon1_alias})", placeholder="Enter the command to use", default=self.game['weapon1_alias']))
+        modal.add_item(discord.ui.TextInput(label=f"Weapon 1 Chance (Default: {defaults.weapon1_chance})", placeholder="Enter the chance to hit", default=self.game['weapon1_chance']))
+        modal.add_item(discord.ui.TextInput(label=f"Weapon 1 Min (Default: {defaults.weapon1_min})", placeholder="Weapon 1 minimum damage", default=self.game['weapon1_min']))
+        modal.add_item(discord.ui.TextInput(label=f"Weapon 1 Max (Default: {defaults.weapon1_max})", placeholder="Weapon 1 maximum damage", default=self.game['weapon1_max']))
         await interaction.response.send_modal(modal)
 
     @discord.ui.button(label="Set Weapon 2", style=discord.ButtonStyle.blurple, row=0)
     async def weapon2(self, interaction: discord.Interaction, button: discord.Button):
         modal = ConfigSettingsModal(self.bot, self.interaction, self.game, 'weapon2', self.expire)
-        modal.add_item(discord.ui.TextInput(label=f"Weapon 2 Name (Default: None)", placeholder="Enter the name for the weapon"))
-        modal.add_item(discord.ui.TextInput(label=f"Weapon 2 Chance (Default: 90)", placeholder="Enter the chance to hit"))
-        modal.add_item(discord.ui.TextInput(label=f"Weapon 2 Min (Default: 20)", placeholder="Weapon minimum damage"))
-        modal.add_item(discord.ui.TextInput(label=f"Weapon 2 Max (Default: 40)", placeholder="Weapon maximum damage"))
+        modal.add_item(discord.ui.TextInput(label=f"Weapon 2 Name (Default: {defaults.weapon2_name})", placeholder="Enter the name for the weapon", default=self.game['weapon2_name']))
+        modal.add_item(discord.ui.TextInput(label=f"Weapon 2 Command (Default: {defaults.weapon2_alias})", placeholder="Enter the command to use", default=self.game['weapon2_alias']))
+        modal.add_item(discord.ui.TextInput(label=f"Weapon 2 Chance (Default: {defaults.weapon2_chance})", placeholder="Enter the chance to hit", default=self.game['weapon2_chance']))
+        modal.add_item(discord.ui.TextInput(label=f"Weapon 2 Min (Default: {defaults.weapon2_min})", placeholder="Weapon minimum damage", default=self.game['weapon2_min']))
+        modal.add_item(discord.ui.TextInput(label=f"Weapon 2 Max (Default: {defaults.weapon2_max})", placeholder="Weapon maximum damage", default=self.game['weapon2_max']))
         await interaction.response.send_modal(modal)
 
-    @discord.ui.button(label="Random Event", style=discord.ButtonStyle.blurple, row=0)
+    @discord.ui.button(label="Set Random Attack", style=discord.ButtonStyle.blurple, row=0)
     async def random(self, interaction: discord.Interaction, button: discord.Button):
         modal = ConfigSettingsModal(self.bot, self.interaction, self.game, 'rand', self.expire)
-        modal.add_item(discord.ui.TextInput(label=f"Random Event Chance (Default: 5)", placeholder="Enter the chance for a random event"))
-        modal.add_item(discord.ui.TextInput(label=f"Attack Min (Default: 50)", placeholder="Event minimum damage"))
-        modal.add_item(discord.ui.TextInput(label=f"Attack Max (Default: 50)", placeholder="Event maximum damage"))
+        modal.add_item(discord.ui.TextInput(label=f"Random Attack Chance (Default: {defaults.rand_chance})", placeholder="Enter the chance for a random event", default=self.game['rand_chance']))
+        modal.add_item(discord.ui.TextInput(label=f"Attack Min (Default: {defaults.rand_min})", placeholder="Event minimum damage", default=self.game['rand_min']))
+        modal.add_item(discord.ui.TextInput(label=f"Attack Max (Default: {defaults.rand_max})", placeholder="Event maximum damage", default=self.game['rand_max']))
         await interaction.response.send_modal(modal)
 
     @discord.ui.button(label="Revive", style=discord.ButtonStyle.blurple, row=1)
     async def revive(self, interaction: discord.Interaction, button: discord.Button):
         modal = ConfigSettingsModal(self.bot, self.interaction, self.game, 'revive', self.expire)
-        modal.add_item(discord.ui.TextInput(label=f"Revive Chance (Default: 4)", placeholder="Enter the chance for a revival"))
-        modal.add_item(discord.ui.TextInput(label=f"Revive Min (Default: 25)", placeholder="Revive min health"))
-        modal.add_item(discord.ui.TextInput(label=f"Revive Max (Default: 25)", placeholder="Revive maximum health"))
+        modal.add_item(discord.ui.TextInput(label=f"Revive Chance (Default: {defaults.revive_chance})", placeholder="Enter the chance for a revival", default=self.game['revive_chance']))
+        modal.add_item(discord.ui.TextInput(label=f"Revive Min (Default: {defaults.revive_min})", placeholder="Revive min health", default=self.game['revive_min']))
+        modal.add_item(discord.ui.TextInput(label=f"Revive Max (Default: {defaults.revive_max})", placeholder="Revive maximum health", default=self.game['revive_max']))
         await interaction.response.send_modal(modal)
 
     @discord.ui.button(label="Heal", style=discord.ButtonStyle.blurple, row=1)
     async def heal(self, interaction: discord.Interaction, button: discord.Button):
         modal = ConfigSettingsModal(self.bot, self.interaction, self.game, 'heal', self.expire)
-        modal.add_item(discord.ui.TextInput(label=f"Heal Chance (Default: 10)", placeholder="Enter the chance for healing"))
-        modal.add_item(discord.ui.TextInput(label=f"Heal Min (Default: 10)", placeholder="Heal min health"))
-        modal.add_item(discord.ui.TextInput(label=f"Heal Max (Default: 20)", placeholder="Heal maximum health"))
+        modal.add_item(discord.ui.TextInput(label=f"Heal Chance (Default: {defaults.heal_chance})", placeholder="Enter the chance for healing", default=self.game['heal_chance']))
+        modal.add_item(discord.ui.TextInput(label=f"Heal Min (Default: {defaults.heal_min})", placeholder="Heal min health", default=self.game['heal_min']))
+        modal.add_item(discord.ui.TextInput(label=f"Heal Max (Default: {defaults.heal_max})", placeholder="Heal maximum health", default=self.game['heal_max']))
         await interaction.response.send_modal(modal)
 
     @discord.ui.button(label="Potion", style=discord.ButtonStyle.blurple, row=1)
     async def potion(self, interaction: discord.Interaction, button: discord.Button):
         modal = ConfigSettingsModal(self.bot, self.interaction, self.game, 'potion', self.expire)
-        modal.add_item(discord.ui.TextInput(label=f"Potion Name (Default: Potion)", placeholder="Enter the name for the potion"))
-        modal.add_item(discord.ui.TextInput(label=f"Potion Chance (Default: 95)", placeholder="Enter the chance for a potion to work"))
-        modal.add_item(discord.ui.TextInput(label=f"Potion Min (Default: 25)", placeholder="Potion min health"))
-        modal.add_item(discord.ui.TextInput(label=f"Potion Max (Default: 25)", placeholder="Potion maximum health"))
+        modal.add_item(discord.ui.TextInput(label=f"Potion Name (Default: {defaults.potion_name})", placeholder="Enter the name for the potion", default=self.game['potion_name']))
+        modal.add_item(discord.ui.TextInput(label=f"Potion Command (Default: {defaults.potion_alias})", placeholder="Enter the command to use", default=self.game['potion_alias']))
+        modal.add_item(discord.ui.TextInput(label=f"Potion Chance (Default: {defaults.potion_chance})", placeholder="Enter the chance for a potion to work", default=self.game['potion_chance']))
+        modal.add_item(discord.ui.TextInput(label=f"Potion Min (Default: {defaults.potion_min})", placeholder="Potion min health", default=self.game['potion_min']))
+        modal.add_item(discord.ui.TextInput(label=f"Potion Max (Default: {defaults.potion_max})", placeholder="Potion maximum health", default=self.game['potion_max']))
         await interaction.response.send_modal(modal)
 
     @discord.ui.button(label="Main Image", style=discord.ButtonStyle.blurple, row=2)
@@ -629,7 +726,7 @@ class ConfigMenu(discord.ui.View):
         await interaction.response.send_modal(modal)
 
     @discord.ui.button(label="Revive Gif", style=discord.ButtonStyle.blurple, row=2)
-    async def revive(self, interaction: discord.Interaction, button: discord.Button):
+    async def revive_gif(self, interaction: discord.Interaction, button: discord.Button):
         modal = ConfigSettingsModal(self.bot, self.interaction, self.game, 'revive_gif', self.expire)
         modal.add_item(discord.ui.TextInput(label=f"GIF URL", placeholder="This is the revive gif"))
         await interaction.response.send_modal(modal)
@@ -644,6 +741,12 @@ class ConfigMenu(discord.ui.View):
     async def game_name(self, interaction: discord.Interaction, button: discord.Button):
         modal = ConfigSettingsModal(self.bot, self.interaction, self.game, 'game_name', self.expire)
         modal.add_item(discord.ui.TextInput(label=f"Game Name", placeholder="Enter the game name"))
+        await interaction.response.send_modal(modal)
+
+    @discord.ui.button(label="Prefix", style=discord.ButtonStyle.blurple, row=3)
+    async def prefix(self, interaction: discord.Interaction, button: discord.Button):
+        modal = ConfigSettingsModal(self.bot, self.interaction, self.game, 'prefix', self.expire)
+        modal.add_item(discord.ui.TextInput(label=f"Prefix for the Command", placeholder="Ex. !"))
         await interaction.response.send_modal(modal)
 
 
