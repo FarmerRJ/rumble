@@ -1,0 +1,544 @@
+2023-11-15 09:17:07 WARNING PyNaCl is not installed, voice will NOT be supported
+2023-11-15 09:17:07 INFO logging in using static token
+2023-11-15 09:17:08 INFO Connection Pool Opened
+2023-11-15 09:17:08 WARNING error connecting in 'pool-1': Psycopg cannot use the 'ProactorEventLoop' to run in async mode. Please use a compatible event loop, for instance by setting 'asyncio.set_event_loop_policy(WindowsSelectorEventLoopPolicy())'
+2023-11-15 09:17:08 WARNING error connecting in 'pool-1': Psycopg cannot use the 'ProactorEventLoop' to run in async mode. Please use a compatible event loop, for instance by setting 'asyncio.set_event_loop_policy(WindowsSelectorEventLoopPolicy())'
+2023-11-15 09:17:08 WARNING error connecting in 'pool-1': Psycopg cannot use the 'ProactorEventLoop' to run in async mode. Please use a compatible event loop, for instance by setting 'asyncio.set_event_loop_policy(WindowsSelectorEventLoopPolicy())'
+2023-11-15 09:17:08 WARNING error connecting in 'pool-1': Psycopg cannot use the 'ProactorEventLoop' to run in async mode. Please use a compatible event loop, for instance by setting 'asyncio.set_event_loop_policy(WindowsSelectorEventLoopPolicy())'
+2023-11-15 09:17:08 WARNING error connecting in 'pool-1': Psycopg cannot use the 'ProactorEventLoop' to run in async mode. Please use a compatible event loop, for instance by setting 'asyncio.set_event_loop_policy(WindowsSelectorEventLoopPolicy())'
+2023-11-15 09:17:09 WARNING error connecting in 'pool-1': Psycopg cannot use the 'ProactorEventLoop' to run in async mode. Please use a compatible event loop, for instance by setting 'asyncio.set_event_loop_policy(WindowsSelectorEventLoopPolicy())'
+2023-11-15 09:17:09 WARNING error connecting in 'pool-1': Psycopg cannot use the 'ProactorEventLoop' to run in async mode. Please use a compatible event loop, for instance by setting 'asyncio.set_event_loop_policy(WindowsSelectorEventLoopPolicy())'
+2023-11-15 09:17:09 WARNING error connecting in 'pool-1': Psycopg cannot use the 'ProactorEventLoop' to run in async mode. Please use a compatible event loop, for instance by setting 'asyncio.set_event_loop_policy(WindowsSelectorEventLoopPolicy())'
+2023-11-15 09:17:09 WARNING error connecting in 'pool-1': Psycopg cannot use the 'ProactorEventLoop' to run in async mode. Please use a compatible event loop, for instance by setting 'asyncio.set_event_loop_policy(WindowsSelectorEventLoopPolicy())'
+2023-11-15 09:17:09 WARNING error connecting in 'pool-1': Psycopg cannot use the 'ProactorEventLoop' to run in async mode. Please use a compatible event loop, for instance by setting 'asyncio.set_event_loop_policy(WindowsSelectorEventLoopPolicy())'
+2023-11-15 09:17:45 WARNING PyNaCl is not installed, voice will NOT be supported
+2023-11-15 09:17:45 INFO logging in using static token
+2023-11-15 09:17:46 INFO Connection Pool Opened
+2023-11-15 09:17:46 INFO Shard ID None has connected to Gateway (Session ID: 74daddd53cea485dbac38be4efe8f321).
+2023-11-15 09:17:48 INFO We have logged in as GameTest#6232
+2023-11-15 09:17:54 ERROR Ignoring exception in command battle
+Traceback (most recent call last):
+  File "C:\Users\Roland\PycharmProjects\rumble\venv\Lib\site-packages\discord\ext\commands\core.py", line 235, in wrapped
+    ret = await coro(*args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Roland\PycharmProjects\rumble\rumble.py", line 57, in battle
+    if not (game_state := self.bot.rumble_games(ctx.channel)):
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: 'dict' object is not callable
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Roland\PycharmProjects\rumble\venv\Lib\site-packages\discord\ext\commands\bot.py", line 1350, in invoke
+    await ctx.command.invoke(ctx)
+  File "C:\Users\Roland\PycharmProjects\rumble\venv\Lib\site-packages\discord\ext\commands\core.py", line 1029, in invoke
+    await injected(*ctx.args, **ctx.kwargs)  # type: ignore
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Roland\PycharmProjects\rumble\venv\Lib\site-packages\discord\ext\commands\core.py", line 244, in wrapped
+    raise CommandInvokeError(exc) from exc
+discord.ext.commands.errors.CommandInvokeError: Command raised an exception: TypeError: 'dict' object is not callable
+2023-11-15 09:18:34 WARNING PyNaCl is not installed, voice will NOT be supported
+2023-11-15 09:18:34 INFO logging in using static token
+2023-11-15 09:18:35 INFO Connection Pool Opened
+2023-11-15 09:18:35 INFO Shard ID None has connected to Gateway (Session ID: 21df702a636a6e3e7c1a356e7db11382).
+2023-11-15 09:18:37 INFO We have logged in as GameTest#6232
+2023-11-15 09:18:40 ERROR Ignoring exception in command battle
+Traceback (most recent call last):
+  File "C:\Users\Roland\PycharmProjects\rumble\venv\Lib\site-packages\discord\ext\commands\core.py", line 235, in wrapped
+    ret = await coro(*args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Roland\PycharmProjects\rumble\rumble.py", line 91, in battle
+    thumbnail = discord.File(f"./images/{ctx.guild.id}-thumbnail.png", filename="thumbnail.png")
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Roland\PycharmProjects\rumble\venv\Lib\site-packages\discord\file.py", line 97, in __init__
+    self.fp = open(fp, 'rb')
+              ^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: './images/1024327041245532170-thumbnail.png'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Roland\PycharmProjects\rumble\venv\Lib\site-packages\discord\ext\commands\bot.py", line 1350, in invoke
+    await ctx.command.invoke(ctx)
+  File "C:\Users\Roland\PycharmProjects\rumble\venv\Lib\site-packages\discord\ext\commands\core.py", line 1029, in invoke
+    await injected(*ctx.args, **ctx.kwargs)  # type: ignore
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Roland\PycharmProjects\rumble\venv\Lib\site-packages\discord\ext\commands\core.py", line 244, in wrapped
+    raise CommandInvokeError(exc) from exc
+discord.ext.commands.errors.CommandInvokeError: Command raised an exception: FileNotFoundError: [Errno 2] No such file or directory: './images/1024327041245532170-thumbnail.png'
+2023-11-15 09:19:34 WARNING PyNaCl is not installed, voice will NOT be supported
+2023-11-15 09:19:34 INFO logging in using static token
+2023-11-15 09:19:35 INFO Connection Pool Opened
+2023-11-15 09:19:35 INFO Shard ID None has connected to Gateway (Session ID: b94404c8c430251e26e4e63d3e7f8e04).
+2023-11-15 09:19:37 INFO We have logged in as GameTest#6232
+2023-11-15 09:21:00 ERROR Ignoring exception in command start
+Traceback (most recent call last):
+  File "C:\Users\Roland\PycharmProjects\rumble\venv\Lib\site-packages\discord\ext\commands\core.py", line 235, in wrapped
+    ret = await coro(*args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Roland\PycharmProjects\rumble\rumble.py", line 339, in start
+    action_phrase, death_embed = await self.perform_turn(player, ctx.channel, players, game_state)  # Pass the channel
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Roland\PycharmProjects\rumble\rumble.py", line 151, in perform_turn
+    phrase = random.choice(game_state['phrases']['attack']).format(attacker=self.player_name_without_discriminator(attacker),
+                           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: 'attack'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Roland\PycharmProjects\rumble\venv\Lib\site-packages\discord\ext\commands\bot.py", line 1350, in invoke
+    await ctx.command.invoke(ctx)
+  File "C:\Users\Roland\PycharmProjects\rumble\venv\Lib\site-packages\discord\ext\commands\core.py", line 1029, in invoke
+    await injected(*ctx.args, **ctx.kwargs)  # type: ignore
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Roland\PycharmProjects\rumble\venv\Lib\site-packages\discord\ext\commands\core.py", line 244, in wrapped
+    raise CommandInvokeError(exc) from exc
+discord.ext.commands.errors.CommandInvokeError: Command raised an exception: KeyError: 'attack'
+2023-11-15 09:21:01 ERROR Ignoring exception in command battle
+Traceback (most recent call last):
+  File "C:\Users\Roland\PycharmProjects\rumble\venv\Lib\site-packages\discord\ext\commands\core.py", line 235, in wrapped
+    ret = await coro(*args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Roland\PycharmProjects\rumble\rumble.py", line 111, in battle
+    await join_message.clear_reactions()
+  File "C:\Users\Roland\PycharmProjects\rumble\venv\Lib\site-packages\discord\message.py", line 1210, in clear_reactions
+    await self._state.http.clear_reactions(self.channel.id, self.id)
+  File "C:\Users\Roland\PycharmProjects\rumble\venv\Lib\site-packages\discord\http.py", line 739, in request
+    raise Forbidden(response, data)
+discord.errors.Forbidden: 403 Forbidden (error code: 50013): Missing Permissions
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Roland\PycharmProjects\rumble\venv\Lib\site-packages\discord\ext\commands\bot.py", line 1350, in invoke
+    await ctx.command.invoke(ctx)
+  File "C:\Users\Roland\PycharmProjects\rumble\venv\Lib\site-packages\discord\ext\commands\core.py", line 1029, in invoke
+    await injected(*ctx.args, **ctx.kwargs)  # type: ignore
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Roland\PycharmProjects\rumble\venv\Lib\site-packages\discord\ext\commands\core.py", line 244, in wrapped
+    raise CommandInvokeError(exc) from exc
+discord.ext.commands.errors.CommandInvokeError: Command raised an exception: Forbidden: 403 Forbidden (error code: 50013): Missing Permissions
+2023-11-15 09:25:59 WARNING PyNaCl is not installed, voice will NOT be supported
+2023-11-15 09:25:59 INFO logging in using static token
+2023-11-15 09:26:00 INFO Connection Pool Opened
+2023-11-15 09:26:01 INFO Shard ID None has connected to Gateway (Session ID: ed0b10147c82e84a5378b2753561ff94).
+2023-11-15 09:26:03 INFO We have logged in as GameTest#6232
+2023-11-15 09:26:19 ERROR Ignoring exception in command start
+Traceback (most recent call last):
+  File "C:\Users\Roland\PycharmProjects\rumble\venv\Lib\site-packages\discord\ext\commands\core.py", line 235, in wrapped
+    ret = await coro(*args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Roland\PycharmProjects\rumble\rumble.py", line 351, in start
+    action_phrase, death_embed = await self.perform_turn(player, ctx.channel, players, game_state)  # Pass the channel
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Roland\PycharmProjects\rumble\rumble.py", line 163, in perform_turn
+    phrase = random.choice(game_state['phrases']['attack']).format(attacker=self.player_name_without_discriminator(attacker),
+                           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: 'attack'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Roland\PycharmProjects\rumble\venv\Lib\site-packages\discord\ext\commands\bot.py", line 1350, in invoke
+    await ctx.command.invoke(ctx)
+  File "C:\Users\Roland\PycharmProjects\rumble\venv\Lib\site-packages\discord\ext\commands\core.py", line 1029, in invoke
+    await injected(*ctx.args, **ctx.kwargs)  # type: ignore
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Roland\PycharmProjects\rumble\venv\Lib\site-packages\discord\ext\commands\core.py", line 244, in wrapped
+    raise CommandInvokeError(exc) from exc
+discord.ext.commands.errors.CommandInvokeError: Command raised an exception: KeyError: 'attack'
+2023-11-15 09:26:19 ERROR Ignoring exception in command battle
+Traceback (most recent call last):
+  File "C:\Users\Roland\PycharmProjects\rumble\rumble.py", line 118, in battle
+    await join_message.clear_reactions()
+  File "C:\Users\Roland\PycharmProjects\rumble\venv\Lib\site-packages\discord\message.py", line 1210, in clear_reactions
+    await self._state.http.clear_reactions(self.channel.id, self.id)
+  File "C:\Users\Roland\PycharmProjects\rumble\venv\Lib\site-packages\discord\http.py", line 739, in request
+    raise Forbidden(response, data)
+discord.errors.Forbidden: 403 Forbidden (error code: 50013): Missing Permissions
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Roland\PycharmProjects\rumble\venv\Lib\site-packages\discord\ext\commands\core.py", line 235, in wrapped
+    ret = await coro(*args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Roland\PycharmProjects\rumble\rumble.py", line 122, in battle
+    self.remove_game(ctx)
+  File "C:\Users\Roland\PycharmProjects\rumble\rumble.py", line 399, in remove_game
+    self.bot.rumble_games.delete(ctx.channel.id)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'dict' object has no attribute 'delete'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Roland\PycharmProjects\rumble\venv\Lib\site-packages\discord\ext\commands\bot.py", line 1350, in invoke
+    await ctx.command.invoke(ctx)
+  File "C:\Users\Roland\PycharmProjects\rumble\venv\Lib\site-packages\discord\ext\commands\core.py", line 1029, in invoke
+    await injected(*ctx.args, **ctx.kwargs)  # type: ignore
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Roland\PycharmProjects\rumble\venv\Lib\site-packages\discord\ext\commands\core.py", line 244, in wrapped
+    raise CommandInvokeError(exc) from exc
+discord.ext.commands.errors.CommandInvokeError: Command raised an exception: AttributeError: 'dict' object has no attribute 'delete'
+2023-11-15 09:27:30 ERROR Ignoring exception in command start
+Traceback (most recent call last):
+  File "C:\Users\Roland\PycharmProjects\rumble\venv\Lib\site-packages\discord\ext\commands\core.py", line 235, in wrapped
+    ret = await coro(*args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Roland\PycharmProjects\rumble\rumble.py", line 351, in start
+    action_phrase, death_embed = await self.perform_turn(player, ctx.channel, players, game_state)  # Pass the channel
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Roland\PycharmProjects\rumble\rumble.py", line 163, in perform_turn
+    phrase = random.choice(game_state['phrases']['attack']).format(attacker=self.player_name_without_discriminator(attacker),
+                           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+KeyError: 'attack'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Roland\PycharmProjects\rumble\venv\Lib\site-packages\discord\ext\commands\bot.py", line 1350, in invoke
+    await ctx.command.invoke(ctx)
+  File "C:\Users\Roland\PycharmProjects\rumble\venv\Lib\site-packages\discord\ext\commands\core.py", line 1029, in invoke
+    await injected(*ctx.args, **ctx.kwargs)  # type: ignore
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Roland\PycharmProjects\rumble\venv\Lib\site-packages\discord\ext\commands\core.py", line 244, in wrapped
+    raise CommandInvokeError(exc) from exc
+discord.ext.commands.errors.CommandInvokeError: Command raised an exception: KeyError: 'attack'
+2023-11-15 09:41:21 WARNING PyNaCl is not installed, voice will NOT be supported
+2023-11-15 09:41:21 INFO logging in using static token
+2023-11-15 09:41:22 INFO Connection Pool Opened
+2023-11-15 09:41:22 INFO Shard ID None has connected to Gateway (Session ID: 4d54c9b39b9a92b0fe857344fe874155).
+2023-11-15 09:41:24 INFO We have logged in as GameTest#6232
+2023-11-15 09:42:48 WARNING PyNaCl is not installed, voice will NOT be supported
+2023-11-15 09:42:48 INFO logging in using static token
+2023-11-15 09:42:49 INFO Connection Pool Opened
+2023-11-15 09:42:50 INFO Shard ID None has connected to Gateway (Session ID: 192c0e096e2412147deb5689c8334b0d).
+2023-11-15 09:42:52 INFO We have logged in as GameTest#6232
+2023-11-15 09:45:19 INFO Error: Command 'import-phrases-csv' raised an exception: IndexError: string index out of range
+farmer0069 in guild Farmer's server
+2023-11-15 09:45:20 INFO Error: Command 'import-phrases-csv' raised an exception: IndexError: string index out of range
+farmer0069 in guild Farmer's server
+2023-11-15 09:45:20 ERROR Task exception was never retrieved
+future: <Task finished name='CommandTree-invoker' coro=<CommandTree._from_interaction.<locals>.wrapper() done, defined at C:\Users\Roland\PycharmProjects\rumble\venv\Lib\site-packages\discord\app_commands\tree.py:1087> exception=CommandInvokeError("Command 'import-phrases-csv' raised an exception: IndexError: string index out of range")>
+Traceback (most recent call last):
+  File "C:\Users\Roland\PycharmProjects\rumble\venv\Lib\site-packages\discord\app_commands\commands.py", line 827, in _do_call
+    return await self._callback(self.binding, interaction, **params)  # type: ignore
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Roland\PycharmProjects\rumble\rumble.py", line 425, in import_assets
+    if r[1] not in ACCEPTED_PHRASE_TYPES:
+       ~^^^
+IndexError: string index out of range
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Roland\PycharmProjects\rumble\venv\Lib\site-packages\discord\app_commands\tree.py", line 1091, in wrapper
+    await self._dispatch_error(interaction, e)
+  File "C:\Users\Roland\PycharmProjects\rumble\venv\Lib\site-packages\discord\app_commands\tree.py", line 1084, in _dispatch_error
+    await self.on_error(interaction, error)
+  File "C:\Users\Roland\PycharmProjects\rumble\main.py", line 76, in on_app_command_error
+    raise error
+  File "C:\Users\Roland\PycharmProjects\rumble\venv\Lib\site-packages\discord\app_commands\tree.py", line 1089, in wrapper
+    await self._call(interaction)
+  File "C:\Users\Roland\PycharmProjects\rumble\venv\Lib\site-packages\discord\app_commands\tree.py", line 1252, in _call
+    await self.on_error(interaction, e)
+  File "C:\Users\Roland\PycharmProjects\rumble\main.py", line 76, in on_app_command_error
+    raise error
+  File "C:\Users\Roland\PycharmProjects\rumble\venv\Lib\site-packages\discord\app_commands\tree.py", line 1248, in _call
+    await command._invoke_with_namespace(interaction, namespace)
+  File "C:\Users\Roland\PycharmProjects\rumble\venv\Lib\site-packages\discord\app_commands\commands.py", line 853, in _invoke_with_namespace
+    return await self._do_call(interaction, transformed_values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Roland\PycharmProjects\rumble\venv\Lib\site-packages\discord\app_commands\commands.py", line 846, in _do_call
+    raise CommandInvokeError(self, e) from e
+discord.app_commands.errors.CommandInvokeError: Command 'import-phrases-csv' raised an exception: IndexError: string index out of range
+2023-11-15 09:46:09 WARNING PyNaCl is not installed, voice will NOT be supported
+2023-11-15 09:46:09 INFO logging in using static token
+2023-11-15 09:46:09 INFO Connection Pool Opened
+2023-11-15 09:46:10 INFO Shard ID None has connected to Gateway (Session ID: ed91de27243f25fc7f1a6457759544c0).
+2023-11-15 09:46:12 INFO We have logged in as GameTest#6232
+2023-11-15 09:48:31 WARNING PyNaCl is not installed, voice will NOT be supported
+2023-11-15 09:48:31 INFO logging in using static token
+2023-11-15 09:48:31 INFO Connection Pool Opened
+2023-11-15 09:48:32 INFO Shard ID None has connected to Gateway (Session ID: 2ef76d8b23136a7fa72424d273e32fc1).
+2023-11-15 09:48:34 INFO We have logged in as GameTest#6232
+2023-11-15 09:49:32 ERROR Ignoring exception in command start
+Traceback (most recent call last):
+  File "C:\Users\Roland\PycharmProjects\rumble\venv\Lib\site-packages\discord\ext\commands\core.py", line 235, in wrapped
+    ret = await coro(*args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Roland\PycharmProjects\rumble\rumble.py", line 369, in start
+    await self.send_battle_embed(ctx, battle_description, players, game)
+  File "C:\Users\Roland\PycharmProjects\rumble\rumble.py", line 269, in send_battle_embed
+    death_embed = self.create_death_embed(player, game)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Roland\PycharmProjects\rumble\rumble.py", line 153, in create_death_embed
+    death_embed = discord.Embed(title=random.choice(game['phrases']['death']), description="", color=discord.Color.dark_red())
+                                                    ~~~~^^^^^^^^^^^
+KeyError: 'phrases'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Roland\PycharmProjects\rumble\venv\Lib\site-packages\discord\ext\commands\bot.py", line 1350, in invoke
+    await ctx.command.invoke(ctx)
+  File "C:\Users\Roland\PycharmProjects\rumble\venv\Lib\site-packages\discord\ext\commands\core.py", line 1029, in invoke
+    await injected(*ctx.args, **ctx.kwargs)  # type: ignore
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Roland\PycharmProjects\rumble\venv\Lib\site-packages\discord\ext\commands\core.py", line 244, in wrapped
+    raise CommandInvokeError(exc) from exc
+discord.ext.commands.errors.CommandInvokeError: Command raised an exception: KeyError: 'phrases'
+2023-11-15 09:53:26 WARNING PyNaCl is not installed, voice will NOT be supported
+2023-11-15 09:53:26 INFO logging in using static token
+2023-11-15 09:53:27 INFO Connection Pool Opened
+2023-11-15 09:53:27 INFO Shard ID None has connected to Gateway (Session ID: 1f433ec195e3f7364a6a7e90fe8a4273).
+2023-11-15 09:53:29 INFO We have logged in as GameTest#6232
+2023-11-15 09:54:09 ERROR Ignoring exception in command start
+Traceback (most recent call last):
+  File "C:\Users\Roland\PycharmProjects\rumble\venv\Lib\site-packages\discord\ext\commands\core.py", line 235, in wrapped
+    ret = await coro(*args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Roland\PycharmProjects\rumble\rumble.py", line 402, in start
+    self.remove_game(ctx)
+  File "C:\Users\Roland\PycharmProjects\rumble\rumble.py", line 405, in remove_game
+    self.bot.rumble_games.delete(ctx.channel.id)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'dict' object has no attribute 'delete'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Roland\PycharmProjects\rumble\venv\Lib\site-packages\discord\ext\commands\bot.py", line 1350, in invoke
+    await ctx.command.invoke(ctx)
+  File "C:\Users\Roland\PycharmProjects\rumble\venv\Lib\site-packages\discord\ext\commands\core.py", line 1029, in invoke
+    await injected(*ctx.args, **ctx.kwargs)  # type: ignore
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Roland\PycharmProjects\rumble\venv\Lib\site-packages\discord\ext\commands\core.py", line 244, in wrapped
+    raise CommandInvokeError(exc) from exc
+discord.ext.commands.errors.CommandInvokeError: Command raised an exception: AttributeError: 'dict' object has no attribute 'delete'
+2023-11-15 09:56:29 WARNING PyNaCl is not installed, voice will NOT be supported
+2023-11-15 09:56:29 INFO logging in using static token
+2023-11-15 09:56:29 INFO Connection Pool Opened
+2023-11-15 09:56:30 INFO Shard ID None has connected to Gateway (Session ID: d91d5161153addf2f239619df9e68ef0).
+2023-11-15 09:56:32 INFO We have logged in as GameTest#6232
+2023-11-15 09:57:04 ERROR Ignoring exception in command start
+Traceback (most recent call last):
+  File "C:\Users\Roland\PycharmProjects\rumble\venv\Lib\site-packages\discord\ext\commands\core.py", line 235, in wrapped
+    ret = await coro(*args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Roland\PycharmProjects\rumble\rumble.py", line 403, in start
+    self.remove_game(ctx)
+  File "C:\Users\Roland\PycharmProjects\rumble\rumble.py", line 406, in remove_game
+    self.bot.rumble_games.delete(ctx.channel.id)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'dict' object has no attribute 'delete'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Roland\PycharmProjects\rumble\venv\Lib\site-packages\discord\ext\commands\bot.py", line 1350, in invoke
+    await ctx.command.invoke(ctx)
+  File "C:\Users\Roland\PycharmProjects\rumble\venv\Lib\site-packages\discord\ext\commands\core.py", line 1029, in invoke
+    await injected(*ctx.args, **ctx.kwargs)  # type: ignore
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Roland\PycharmProjects\rumble\venv\Lib\site-packages\discord\ext\commands\core.py", line 244, in wrapped
+    raise CommandInvokeError(exc) from exc
+discord.ext.commands.errors.CommandInvokeError: Command raised an exception: AttributeError: 'dict' object has no attribute 'delete'
+2023-11-15 10:06:05 WARNING PyNaCl is not installed, voice will NOT be supported
+2023-11-15 10:06:05 INFO logging in using static token
+2023-11-15 10:06:06 INFO Connection Pool Opened
+2023-11-15 10:06:07 INFO Shard ID None has connected to Gateway (Session ID: 8d96ac3329cc104ad05140c91648ba6e).
+2023-11-15 10:06:09 INFO We have logged in as GameTest#6232
+2023-11-15 10:44:23 INFO Shard ID None has successfully RESUMED session 8d96ac3329cc104ad05140c91648ba6e.
+2023-11-15 11:50:50 INFO Shard ID None has successfully RESUMED session 8d96ac3329cc104ad05140c91648ba6e.
+2023-11-15 11:56:58 WARNING PyNaCl is not installed, voice will NOT be supported
+2023-11-15 11:56:58 INFO logging in using static token
+2023-11-15 11:56:58 INFO Connection Pool Opened
+2023-11-15 11:57:00 INFO Shard ID None has connected to Gateway (Session ID: 3329be31e02ec6d2b33f59a394fea40c).
+2023-11-15 11:57:02 INFO We have logged in as GameTest#6232
+2023-11-15 11:57:18 INFO Error: Command 'rumble-config' raised an exception: KeyError: 'thumbanil'
+farmer0069 in guild Farmer's server
+2023-11-15 11:57:18 INFO Error: Command 'rumble-config' raised an exception: KeyError: 'thumbanil'
+farmer0069 in guild Farmer's server
+2023-11-15 11:57:18 ERROR Task exception was never retrieved
+future: <Task finished name='CommandTree-invoker' coro=<CommandTree._from_interaction.<locals>.wrapper() done, defined at C:\Users\Roland\PycharmProjects\rumble\venv\Lib\site-packages\discord\app_commands\tree.py:1087> exception=CommandInvokeError("Command 'rumble-config' raised an exception: KeyError: 'thumbanil'")>
+Traceback (most recent call last):
+  File "C:\Users\Roland\PycharmProjects\rumble\venv\Lib\site-packages\discord\app_commands\commands.py", line 827, in _do_call
+    return await self._callback(self.binding, interaction, **params)  # type: ignore
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Roland\PycharmProjects\rumble\rumble.py", line 443, in config_menu
+    embed = generate_config_embed(self.bot.rumble.get(interaction.guild.id), self.bot, expire)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Roland\PycharmProjects\rumble\rumble.py", line 468, in generate_config_embed
+    embed.set_thumbnail(url=game['thumbanil'])
+                            ~~~~^^^^^^^^^^^^^
+KeyError: 'thumbanil'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Roland\PycharmProjects\rumble\venv\Lib\site-packages\discord\app_commands\tree.py", line 1091, in wrapper
+    await self._dispatch_error(interaction, e)
+  File "C:\Users\Roland\PycharmProjects\rumble\venv\Lib\site-packages\discord\app_commands\tree.py", line 1084, in _dispatch_error
+    await self.on_error(interaction, error)
+  File "C:\Users\Roland\PycharmProjects\rumble\main.py", line 76, in on_app_command_error
+    raise error
+  File "C:\Users\Roland\PycharmProjects\rumble\venv\Lib\site-packages\discord\app_commands\tree.py", line 1089, in wrapper
+    await self._call(interaction)
+  File "C:\Users\Roland\PycharmProjects\rumble\venv\Lib\site-packages\discord\app_commands\tree.py", line 1252, in _call
+    await self.on_error(interaction, e)
+  File "C:\Users\Roland\PycharmProjects\rumble\main.py", line 76, in on_app_command_error
+    raise error
+  File "C:\Users\Roland\PycharmProjects\rumble\venv\Lib\site-packages\discord\app_commands\tree.py", line 1248, in _call
+    await command._invoke_with_namespace(interaction, namespace)
+  File "C:\Users\Roland\PycharmProjects\rumble\venv\Lib\site-packages\discord\app_commands\commands.py", line 853, in _invoke_with_namespace
+    return await self._do_call(interaction, transformed_values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Roland\PycharmProjects\rumble\venv\Lib\site-packages\discord\app_commands\commands.py", line 846, in _do_call
+    raise CommandInvokeError(self, e) from e
+discord.app_commands.errors.CommandInvokeError: Command 'rumble-config' raised an exception: KeyError: 'thumbanil'
+2023-11-15 11:58:07 WARNING PyNaCl is not installed, voice will NOT be supported
+2023-11-15 11:58:07 INFO logging in using static token
+2023-11-15 11:58:07 INFO Connection Pool Opened
+2023-11-15 11:58:08 INFO Shard ID None has connected to Gateway (Session ID: 204416900929d3f1a59afddf628cd3b6).
+2023-11-15 11:58:10 INFO We have logged in as GameTest#6232
+2023-11-15 11:58:39 WARNING PyNaCl is not installed, voice will NOT be supported
+2023-11-15 11:58:39 INFO logging in using static token
+2023-11-15 11:58:40 INFO Connection Pool Opened
+2023-11-15 11:58:41 INFO Shard ID None has connected to Gateway (Session ID: fb7b950be8fa95bc2dc8f6505f4b8c96).
+2023-11-15 11:58:43 INFO We have logged in as GameTest#6232
+2023-11-15 12:00:25 WARNING PyNaCl is not installed, voice will NOT be supported
+2023-11-15 12:00:25 INFO logging in using static token
+2023-11-15 12:00:26 INFO Connection Pool Opened
+2023-11-15 12:00:27 INFO Shard ID None has connected to Gateway (Session ID: 77a0b168c86a366895c720cd658feb4f).
+2023-11-15 12:00:29 INFO We have logged in as GameTest#6232
+2023-11-15 12:03:16 WARNING PyNaCl is not installed, voice will NOT be supported
+2023-11-15 12:03:16 INFO logging in using static token
+2023-11-15 12:03:16 INFO Connection Pool Opened
+2023-11-15 12:03:17 INFO Shard ID None has connected to Gateway (Session ID: bb35b63f411353939fd29381812489bf).
+2023-11-15 12:03:19 INFO We have logged in as GameTest#6232
+2023-11-15 12:03:38 ERROR Ignoring exception in modal <ConfigSettingsModal timeout=None children=3>:
+Traceback (most recent call last):
+  File "C:\Users\Roland\PycharmProjects\rumble\venv\Lib\site-packages\discord\ui\modal.py", line 188, in _scheduled_task
+    await self.on_submit(interaction)
+  File "C:\Users\Roland\PycharmProjects\rumble\rumble.py", line 504, in on_submit
+    await update_settings(self.bot, 'special_max', int(self.children[3].value), interaction.guild.id)
+                                                       ~~~~~~~~~~~~~^^^
+IndexError: list index out of range
+2023-11-15 12:04:57 WARNING PyNaCl is not installed, voice will NOT be supported
+2023-11-15 12:04:57 INFO logging in using static token
+2023-11-15 12:04:57 INFO Connection Pool Opened
+2023-11-15 12:04:59 INFO Shard ID None has connected to Gateway (Session ID: de3b8d38072cfdc897eec9da3c212c0c).
+2023-11-15 12:05:01 INFO We have logged in as GameTest#6232
+2023-11-15 12:05:12 ERROR Ignoring exception in modal <ConfigSettingsModal timeout=None children=3>:
+Traceback (most recent call last):
+  File "C:\Users\Roland\PycharmProjects\rumble\venv\Lib\site-packages\discord\ui\modal.py", line 188, in _scheduled_task
+    await self.on_submit(interaction)
+  File "C:\Users\Roland\PycharmProjects\rumble\rumble.py", line 534, in on_submit
+    new_dict = await db.select_fetchone_dict("SELECT * FROM rumble_guild WHERE guild_id = %s", [guild_id])
+                                                                                                ^^^^^^^^
+NameError: name 'guild_id' is not defined
+2023-11-15 12:06:45 WARNING PyNaCl is not installed, voice will NOT be supported
+2023-11-15 12:06:45 INFO logging in using static token
+2023-11-15 12:06:46 INFO Connection Pool Opened
+2023-11-15 12:06:48 INFO Shard ID None has connected to Gateway (Session ID: 3edcc2b8b500368cd509fd4b90ce9184).
+2023-11-15 12:06:50 INFO We have logged in as GameTest#6232
+2023-11-15 12:07:40 WARNING PyNaCl is not installed, voice will NOT be supported
+2023-11-15 12:07:40 INFO logging in using static token
+2023-11-15 12:07:40 INFO Connection Pool Opened
+2023-11-15 12:07:42 INFO Shard ID None has connected to Gateway (Session ID: 63119b2da66072af72673a471d90cddf).
+2023-11-15 12:07:44 INFO We have logged in as GameTest#6232
+2023-11-15 12:08:08 WARNING PyNaCl is not installed, voice will NOT be supported
+2023-11-15 12:08:08 INFO logging in using static token
+2023-11-15 12:08:08 INFO Connection Pool Opened
+2023-11-15 12:08:10 INFO Shard ID None has connected to Gateway (Session ID: fb8cbaff6408a65206eceb5f4e2c696d).
+2023-11-15 12:08:12 INFO We have logged in as GameTest#6232
+2023-11-15 12:08:25 ERROR Ignoring exception in modal <ConfigSettingsModal timeout=None children=4>:
+Traceback (most recent call last):
+  File "C:\Users\Roland\PycharmProjects\rumble\venv\Lib\site-packages\discord\ui\modal.py", line 188, in _scheduled_task
+    await self.on_submit(interaction)
+  File "C:\Users\Roland\PycharmProjects\rumble\rumble.py", line 502, in on_submit
+    await update_settings(self.bot, 'special_chance', int(self.children[0].value), interaction.guild.id)
+                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: invalid literal for int() with base 10: 'Dart'
+2023-11-15 12:09:14 WARNING PyNaCl is not installed, voice will NOT be supported
+2023-11-15 12:09:14 INFO logging in using static token
+2023-11-15 12:09:14 INFO Connection Pool Opened
+2023-11-15 12:09:16 INFO Shard ID None has connected to Gateway (Session ID: 1bf91fc0ae6db7708d5f5b6536351c8e).
+2023-11-15 12:09:18 INFO We have logged in as GameTest#6232
+2023-11-15 12:11:39 WARNING PyNaCl is not installed, voice will NOT be supported
+2023-11-15 12:11:39 INFO logging in using static token
+2023-11-15 12:11:40 INFO Connection Pool Opened
+2023-11-15 12:11:42 INFO Shard ID None has connected to Gateway (Session ID: 486c4f0962a468094bfe750234b07134).
+2023-11-15 12:11:44 INFO We have logged in as GameTest#6232
+2023-11-15 12:15:15 WARNING PyNaCl is not installed, voice will NOT be supported
+2023-11-15 12:15:15 INFO logging in using static token
+2023-11-15 12:15:15 INFO Connection Pool Opened
+2023-11-15 12:15:16 INFO Shard ID None has connected to Gateway (Session ID: 7331cd5e1c597c9239645e6ae0777426).
+2023-11-15 12:15:18 INFO We have logged in as GameTest#6232
+2023-11-15 12:53:33 INFO Shard ID None has successfully RESUMED session 7331cd5e1c597c9239645e6ae0777426.
+2023-11-15 13:15:59 INFO Shard ID None has successfully RESUMED session 7331cd5e1c597c9239645e6ae0777426.
+2023-11-15 14:07:45 WARNING PyNaCl is not installed, voice will NOT be supported
+2023-11-15 14:07:45 INFO logging in using static token
+2023-11-15 14:07:46 INFO Connection Pool Opened
+2023-11-15 14:07:47 INFO Shard ID None has connected to Gateway (Session ID: bfc2e00aa8eb5877e30bbae39e38dad8).
+2023-11-15 14:07:49 INFO We have logged in as GameTest#6232
+2023-11-15 14:08:21 ERROR Ignoring exception in command reset
+Traceback (most recent call last):
+  File "C:\Users\Roland\PycharmProjects\rumble\venv\Lib\site-packages\discord\ext\commands\core.py", line 235, in wrapped
+    ret = await coro(*args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Roland\PycharmProjects\rumble\rumble.py", line 140, in reset
+    self.remove_game(ctx)
+  File "C:\Users\Roland\PycharmProjects\rumble\rumble.py", line 406, in remove_game
+    self.bot.rumble_games.delete(ctx.channel.id)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'dict' object has no attribute 'delete'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Roland\PycharmProjects\rumble\venv\Lib\site-packages\discord\ext\commands\bot.py", line 1350, in invoke
+    await ctx.command.invoke(ctx)
+  File "C:\Users\Roland\PycharmProjects\rumble\venv\Lib\site-packages\discord\ext\commands\core.py", line 1029, in invoke
+    await injected(*ctx.args, **ctx.kwargs)  # type: ignore
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Roland\PycharmProjects\rumble\venv\Lib\site-packages\discord\ext\commands\core.py", line 244, in wrapped
+    raise CommandInvokeError(exc) from exc
+discord.ext.commands.errors.CommandInvokeError: Command raised an exception: AttributeError: 'dict' object has no attribute 'delete'
+2023-11-15 14:10:24 WARNING PyNaCl is not installed, voice will NOT be supported
+2023-11-15 14:10:24 INFO logging in using static token
+2023-11-15 14:10:24 INFO Connection Pool Opened
+2023-11-15 14:10:25 INFO Shard ID None has connected to Gateway (Session ID: f110889e982ddbb9fa0f43e3d4edcbd2).
+2023-11-15 14:10:27 INFO We have logged in as GameTest#6232
+2023-11-15 14:11:16 ERROR Ignoring exception in command None
+discord.ext.commands.errors.CommandNotFound: Command "batt" is not found
+2023-11-15 15:12:31 INFO Shard ID None has successfully RESUMED session f110889e982ddbb9fa0f43e3d4edcbd2.
+2023-11-15 15:31:21 INFO Shard ID None has successfully RESUMED session f110889e982ddbb9fa0f43e3d4edcbd2.
+2023-11-15 16:23:33 INFO Shard ID None has successfully RESUMED session f110889e982ddbb9fa0f43e3d4edcbd2.
+2023-11-15 17:22:08 INFO Shard ID None has successfully RESUMED session f110889e982ddbb9fa0f43e3d4edcbd2.
+2023-11-15 17:46:23 INFO Shard ID None has successfully RESUMED session f110889e982ddbb9fa0f43e3d4edcbd2.
+2023-11-15 18:35:36 INFO Shard ID None has successfully RESUMED session f110889e982ddbb9fa0f43e3d4edcbd2.
+2023-11-15 18:56:30 INFO Shard ID None has successfully RESUMED session f110889e982ddbb9fa0f43e3d4edcbd2.
+2023-11-15 22:00:27 INFO Shard ID None has successfully RESUMED session f110889e982ddbb9fa0f43e3d4edcbd2.
+2023-11-16 01:08:32 INFO Shard ID None has successfully RESUMED session f110889e982ddbb9fa0f43e3d4edcbd2.
+2023-11-16 02:50:12 INFO Shard ID None has successfully RESUMED session f110889e982ddbb9fa0f43e3d4edcbd2.
+2023-11-16 04:29:00 INFO Shard ID None has successfully RESUMED session f110889e982ddbb9fa0f43e3d4edcbd2.
+2023-11-16 06:30:33 INFO Shard ID None has successfully RESUMED session f110889e982ddbb9fa0f43e3d4edcbd2.
+2023-11-16 08:07:03 INFO Shard ID None has successfully RESUMED session f110889e982ddbb9fa0f43e3d4edcbd2.
+2023-11-16 09:18:20 INFO Shard ID None has successfully RESUMED session f110889e982ddbb9fa0f43e3d4edcbd2.
+2023-11-16 10:30:45 INFO Shard ID None has successfully RESUMED session f110889e982ddbb9fa0f43e3d4edcbd2.
+2023-11-16 13:32:56 INFO Shard ID None has successfully RESUMED session f110889e982ddbb9fa0f43e3d4edcbd2.
+2023-11-16 13:57:05 INFO Shard ID None has successfully RESUMED session f110889e982ddbb9fa0f43e3d4edcbd2.
+2023-11-16 14:20:53 INFO Shard ID None has successfully RESUMED session f110889e982ddbb9fa0f43e3d4edcbd2.
+2023-11-16 15:05:49 INFO Shard ID None has successfully RESUMED session f110889e982ddbb9fa0f43e3d4edcbd2.
+2023-11-16 15:37:02 INFO Shard ID None has successfully RESUMED session f110889e982ddbb9fa0f43e3d4edcbd2.
+2023-11-16 16:49:57 INFO Shard ID None has successfully RESUMED session f110889e982ddbb9fa0f43e3d4edcbd2.
+2023-11-16 17:15:17 INFO Shard ID None has successfully RESUMED session f110889e982ddbb9fa0f43e3d4edcbd2.
+2023-11-16 18:03:45 INFO Shard ID None has successfully RESUMED session f110889e982ddbb9fa0f43e3d4edcbd2.
+2023-11-16 19:01:34 INFO Shard ID None has successfully RESUMED session f110889e982ddbb9fa0f43e3d4edcbd2.
+2023-11-16 19:53:50 INFO Shard ID None has successfully RESUMED session f110889e982ddbb9fa0f43e3d4edcbd2.
+2023-11-16 22:07:45 INFO Shard ID None has successfully RESUMED session f110889e982ddbb9fa0f43e3d4edcbd2.
+2023-11-17 00:01:16 INFO Shard ID None has successfully RESUMED session f110889e982ddbb9fa0f43e3d4edcbd2.
